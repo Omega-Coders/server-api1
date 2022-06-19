@@ -1,0 +1,23 @@
+{
+  "name": "fantastic-web-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "npm run watch --prefix express-server",
+    "client": "npm start --prefix fantastic",
+    "watch": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Omega-Coders/fantastic-webapp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Omega-Coders/fantastic-webapp/issues"
+  },
+  "homepage": "https://github.com/Omega-Coders/fantastic-webapp#readme"
+}
