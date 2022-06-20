@@ -9,11 +9,23 @@ const PORT = process.env.PORT || 8000; // Taking Environmental varibles same lik
 
 
 const server = http.createServer(app);
+const connectdb = require("./db/connect");
+//const MONGO_URI= 'mongodb+srv://textextraction:textextraction%40123@cluster0.rlcw1.mongodb.net/?retryWrites=true&w=majority'
+require('dotenv').config()
+const start =async ()=>{
+    try {
+         await connectdb(process.env.MONGO_URI);
+         server.listen(PORT, ()=> {
+            console.log(`listening to ${PORT}`);
+        })
+        
+    } catch (error) {
+        console.log(error);
+    }
+ 
+}
+start();
 
-
-server.listen(PORT, ()=> {
-    console.log(`listening to ${PORT}`);
-})
 
 /////// Reason for seperate for express and node http
 // testing the API in-process without having to perform the network calls
