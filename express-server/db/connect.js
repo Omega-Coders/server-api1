@@ -1,10 +1,10 @@
-const mangoose =require("mongoose");
 
+const mongoose=require("mongoose");
 const connectdb=(url)=>{
-    return mangoose.connect(url,{
+    return mongoose.connect(url,{
         useNewUrlParser:true,
-        // useCreateIndex:true,
-        // useFindAndModify:false,
+        //useCreateIndex:true,
+        //useFindAndModify:false,
         useUnifiedTopology:false,
 
     })
