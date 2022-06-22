@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Omega-Coders/fantastic-webapp#readme",
   "dependencies": {
+    "concurrently": "^7.2.2",
     "i": "^0.3.7",
     "react-scripts": "^5.0.1"
   }

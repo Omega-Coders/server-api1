@@ -5,7 +5,7 @@ const cropperRouter = require('./routes/cropper.router');
 const cors = require('cors')
 
 const app = express();
-app.use(express.json());
+
 // const loginRouter = require('./routes/login.router');
 
 app.use(cors({
@@ -16,6 +16,24 @@ app.use(cors({
 
 
 // module.exports = app;
+// app.use(loginRouter);
+require('express-async-errors');
+// intialising errors
+
+//importing routes
+const formsRouter=require("./routes/form.router")
+const authRouter=require("./routes/auth_router")
+const authenticateUser = require('./middlewares/authentication');
+//importing errors
+//const errorhandler=require("./middlewares/error-handler");
+//using routes 
+app.use(express.json())
+app.use('/api/v1/forms',formsRouter);
+app.use('/api/v1/auth',authRouter);
+//using errors
+//app.use(errorhandler)
+//connecting port
+
 
 app.use(cropperRouter);
 module.exports = app;
