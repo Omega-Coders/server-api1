@@ -9,7 +9,14 @@ import './login.css';
 import {Link} from 'react-router-dom';
 import { TextField } from '@material-ui/core';
 
+
+
+
 const Login = () => {
+
+
+
+
     return (
         <div class="Login">
             <div className='container log'>
@@ -65,6 +72,7 @@ const Login = () => {
                                 <img width="23px"  src={google_logo} style={{ marginRight: "8px" }} ></img>
                                 Continue with Google
                             </Button>
+
                         </div>
                 
                 </div>

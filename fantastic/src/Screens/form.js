@@ -1,5 +1,5 @@
 
-import React from 'react'
+import {React, useState} from 'react'
 import { Container,Navbar,Nav ,Button} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import './form.css';
@@ -8,7 +8,24 @@ import formsimg from "../form_img1png.png";
 import logo from '../tiktok-app.svg';
 import msg_icon from '../icons8-mail-24.png';
 import { TextField } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 function Form() {
+  const navigate = useNavigate();
+  const [TemplateName, setTemplateName] = useState('');
+
+  const passName = () => {
+        navigate('/cropper',
+            {
+                state: {
+                    tempname: TemplateName
+                }
+            });
+    }
+
+  
+
   return (
 <div>
     <Navbar  bg="none" expand="lg">
@@ -108,6 +125,7 @@ function Form() {
                 id="firstName"
                 label="Enter Name of the Template"
                 autoFocus
+                onChange={(e)=> {setTemplateName(e.target.value); console.log(typeof(TemplateName))}}
               />
         </div>
         <br></br>
@@ -161,10 +179,13 @@ function Form() {
         <br></br>
         <div className='row'>
         <br></br>
-        <Button variant="light" className="google-but" style={{ color:"white",  backgroundColor:"#2f2e41",borderRadius:"15px"}} >
 
+
+        <Button onClick={() => { passName() }} variant="light" className="google-but" style={{ color:"white",  backgroundColor:"#2f2e41",borderRadius:"15px"}} >
            Submit
         </Button>
+
+        
         </div>
         
         </div>

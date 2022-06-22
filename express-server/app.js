@@ -1,20 +1,21 @@
-// const express = require('express');
+const express = require('express');
 
-// const cors = require('cors')
+const cropperRouter = require('./routes/cropper.router');
 
-// const app = express();
+const cors = require('cors')
 
+const app = express();
+app.use(express.json());
 // const loginRouter = require('./routes/login.router');
 
-// app.use(cors({
-//     origin : 'http://localhost:3000', // whitelist of accepted clients
-// }));
+app.use(cors({
+    origin : 'http://localhost:3000', // whitelist of accepted clients
+}));
+
 // app.use(express.json()); //middleware
-// app.use(loginRouter);
+
 
 // module.exports = app;
-const express =require("express");
 
-const app =express();
-const port =8000;
-
+app.use(cropperRouter);
+module.exports = app;

@@ -4,6 +4,20 @@ import { Annotorious } from '@recogito/annotorious';
 import '@recogito/annotorious/dist/annotorious.min.css';
 
 
+const axios = require('axios');
+
+
+async function postData(tempname, key, coord) {
+  await axios.post('http://localhost:8000/cropper/add-details', {
+            templateName: tempname,
+            key: key,
+            coordinates: coord,
+            regex: "string"
+        }).then(function (response){console.log(response)}).catch(function (response){console.log(response)})
+}
+
+
+
 function Annotation(props) {
 
   // Ref to the image DOM element
@@ -16,11 +30,15 @@ function Annotation(props) {
   const [ tool, setTool ] = useState('rect');
 
   const [keys, setKeys] = useState([{}]);
-  
 
   // Init Annotorious when the component
   // mounts, and keep the current 'anno'
   // instance in the application state
+
+
+
+
+
   useEffect(() => {
       
     let annotorious = null;
@@ -28,7 +46,10 @@ function Annotation(props) {
     if (imgEl.current) {
       // Init
       annotorious = new Annotorious({
-        image: imgEl.current
+        image: imgEl.current,
+            widgets: [
+        'TAG',
+      ]
       });
 
 
@@ -36,10 +57,10 @@ function Annotation(props) {
       annotorious.on('createAnnotation', annotation => {
         console.log('created', annotation);
         console.log(keys)
+        postData(props.Name, annotation.body[0].value, annotation.target.selector.value);
         setKeys([...keys, {Key: annotation.body[0].value, Coordinates: "Coordiantes : "+annotation.target.selector.value}])
       });
 
-      
 
       annotorious.on('updateAnnotation', (annotation, previous) => {
         console.log('updated', annotation, previous);
@@ -53,6 +74,8 @@ function Annotation(props) {
 
     // Keep current Annotorious instance in state
     setAnno(annotorious);
+
+
 
     // Cleanup: destroy current instance
     return () => annotorious.destroy();
