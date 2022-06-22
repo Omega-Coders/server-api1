@@ -7,17 +7,18 @@ const app = require('./app');
 
 
 const PORT = process.env.PORT || 8000; // Taking Environmental varibles same like taking command line args (process.arg)
-const connectdb=require('./db/connect');
-const url='mongodb+srv://textextraction:textextraction%40123@cluster0.rlcw1.mongodb.net/?retryWrites=true&w=majority';
+
 
 const server = http.createServer(app);
 
 const connectdb = require("./db/connect");
+const contro=require('./controllers/formapi')
 //const MONGO_URI= 'mongodb+srv://textextraction:textextraction%40123@cluster0.rlcw1.mongodb.net/?retryWrites=true&w=majority'
 require('dotenv').config()
 const start =async ()=>{
     try {
          await connectdb(process.env.MONGO_URI);
+            // contro();
          server.listen(PORT, ()=> {
             console.log(`listening to ${PORT}`);
         })
