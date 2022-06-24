@@ -1,15 +1,15 @@
 
 import 'bootstrap/dist/css/bootstrap.css';
-
+import msg_icon from '../icons8-mail-24.png';
 import { useState, React, useEffect } from 'react';
-
-
+import logo from '../undraw_secure_login_pdn4.svg';
+import { Container,Navbar,Nav ,Button,Row,Col} from 'react-bootstrap';
 import Annotation from './Annotation';
 
-
+import Resizer from "react-image-file-resizer";
 import axios from 'axios';
 
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom';
 
 
     async function postTemplateImage(tempName, img){
@@ -24,7 +24,20 @@ import { useLocation } from 'react-router-dom'
         });
             }
 
-
+const resizeFile = (file) =>
+new Promise((resolve) => {
+Resizer.imageFileResizer(
+        file,
+           300,300,
+            "JPEG",
+            100,
+            0,
+            (uri) => {
+                resolve(uri);
+                },
+                "base64"
+              );
+            });
 
 
 function FileUploadPage(){
@@ -48,18 +61,33 @@ function FileUploadPage(){
         
     }
 
-    const Preview = () =>{
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-        setImgData(reader.result);
-        postTemplateImage(state.tempname, reader.result);
-        });
+    const Preview = async() =>{
+        try {
+            const reader = new FileReader();
+            
+            const image = await resizeFile(picture);
+            setImgData(image);
+            console.log(image)
 
+            postTemplateImage(state.tempname, image);
+            return image;
+
+    
+        } catch (error) {
+            console.log(error);
+        }
         
-        return (
-            reader.readAsDataURL(picture)
-        );
+       
+        
+        
+        
+       
     }
+        
+        // return (
+        //     reader.readAsDataURL(picture)
+        // );
+    
 
     // function TakeInput(event) {
     //     console.log("TakeInput");
@@ -77,6 +105,35 @@ function FileUploadPage(){
 
     return(
     <div>
+        <Navbar  bg="none" expand="lg">
+    <Container>
+      <Nav>
+          <Nav.Item className="edge-de">
+              <div className="edge-design">
+        </div>
+        <div className="edge-des"></div>
+          </Nav.Item>
+      </Nav>
+   
+      
+      <Navbar.Brand href="#" className="app-name" style={{margin:"10px"}}>
+        <img width="50vw"
+              className="img-fluid align-top d-inline-block tiktok"
+              height="50vh" src={logo}  alt="logo"></img>
+        Fantastic
+        </Navbar.Brand>
+      
+    
+        <Nav.Link href="#" className='butt'>
+            <Button variant="light" className="contact-but" style={{ color:"white", backgroundColor:"#5d3fd3", borderRadius:"15px", }}>
+                <img width="27"
+              className="align-top d-inline-block nav-comp"
+              height="22" src={msg_icon}  alt="logo" ></img>
+            Contact Us</Button>
+            </Nav.Link>
+        </Container>
+        </Navbar> 
+            
         <div className='container'>
             <div className='row'>
                 <div className='col-sm'>
@@ -102,7 +159,7 @@ function FileUploadPage(){
                         <div className="elementContainer"></div>
                     </DynamicCreateElement>
                 </div> */}
-                    <Annotation Image={imgData} Name={state.tempname}/>
+                      <Annotation Image={imgData} Name={state.tempname}/>  
                     {/* <input type="text" onChange={TakeInput}  value={Input}/>
                     <button type="submit" onClick={AddKeys}>submit</button>
                     <ol>
@@ -112,10 +169,12 @@ function FileUploadPage(){
                 </div>
             </div>
         </div>
-			
-			
+        
+       
 		</div>
+   
 	)
 
+                
 }
 export default FileUploadPage;
