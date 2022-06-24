@@ -10,7 +10,12 @@ async function postCropperDetails(req, res) {
     const CropperModelBody = new CropperModel({
     "templateName": req.body.templateName,
     'key': req.body.key,
-    'coordinates': req.body.coordinates,
+    'coordinates': {
+        'x': req.body.x,
+        'y': req.body.y,
+        'w': req.body.w,
+        'h': req.body.h
+    },
     'regex': req.body.regex});
     await CropperModelBody.save();
     return res.status(200).json(CropperModelBody);

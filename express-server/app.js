@@ -27,7 +27,8 @@ const authenticateUser = require('./middlewares/authentication');
 //importing errors
 //const errorhandler=require("./middlewares/error-handler");
 //using routes 
-app.use(express.json())
+var bodyParser = require('body-parser');
+app.use(bodyParser.json({limit: '50mb'}));
 app.use('/api/v1/forms',formsRouter);
 app.use('/api/v1/auth',authRouter);
 //using errors

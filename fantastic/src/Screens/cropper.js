@@ -1,12 +1,13 @@
 
 import 'bootstrap/dist/css/bootstrap.css';
 
-import { useState, React, useEffect } from 'react';
-
+import { useState, React } from 'react';
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
 
 import Annotation from './Annotation';
 
-
+import './cropper.css';
 import axios from 'axios';
 
 import { useLocation } from 'react-router-dom'
@@ -33,9 +34,24 @@ function FileUploadPage(){
     // const [keys, setKey] = useState([]);
     const [picture, setPicture] = useState(null);
     const [imgData, setImgData] = useState(null);
-
+    const [hw, sethw] = useState({h: null, w: null});
+    const [cropData, setCropData] = useState("");
+    const [cropper, setCropper] = useState(null);
 
     const {state} = useLocation();
+
+
+
+
+
+
+    var img = new Image();
+    img.src=cropData;
+    img.onload = function(){
+        var height = img.height;
+        var width = img.width;
+        sethw({h: height, w: width});
+    }
 
 
 
@@ -45,34 +61,29 @@ function FileUploadPage(){
         setPicture(event.target.files[0]);
         };
         console.log('taken picture');
-        
     }
+
+
+
 
     const Preview = () =>{
         const reader = new FileReader();
         reader.addEventListener("load", () => {
         setImgData(reader.result);
-        postTemplateImage(state.tempname, reader.result);
         });
-
-        
-        return (
-            reader.readAsDataURL(picture)
-        );
+        return reader.readAsDataURL(picture);
     }
 
-    // function TakeInput(event) {
-    //     console.log("TakeInput");
-    //     setInput(event.target.value)
-    // }
-
-    // function AddKeys() {
-    //     setKey([...keys, Input]);
-    //     setInput("");
-    //     console.log("AddKeys");
-    // }
 
 
+
+
+    const getCropData = () => {
+    if (typeof cropper !== "undefined") {
+        setCropData(cropper.getCroppedCanvas().toDataURL());
+        postTemplateImage(state.tempname, cropper.getCroppedCanvas().toDataURL());
+        }
+    };
 
 
     return(
@@ -81,34 +92,44 @@ function FileUploadPage(){
             <div className='row'>
                 <div className='col-sm'>
                     <div>
-                        <input type="file" onChange={TakeInputImage}/>
+                        <input  type="file" onChange={TakeInputImage}/>
 
                         <button style={{margin: "50px"}} onClick={Preview}>Preview</button>
                         {/* <img src={imgData} alt="" width="100%"></img> */}
+                        { cropData === "" ?
+                        <div>
+                        <Cropper
+                            style={{ height: 600, width: "100%" }}
+                            zoomTo={0.5}
+                            initialAspectRatio={1}
+                            preview=".img-preview"
+                            src={imgData}
+                            viewMode={1}
+                            minCropBoxHeight={10}
+                            minCropBoxWidth={10}
+                            background={false}
+                            responsive={true}
+                            autoCropArea={1}
+                            checkOrientation={false} // https://github.com/fengyuanchen/cropperjs/issues/671
+                            onInitialized={(instance) => {
+                                setCropper(instance);
+                            }}
+                            guides={true}
+                        /> <button onClick={getCropData} >
+                            Crop Image
+                        </button> </div> :<Annotation Image={cropData} Name={state.tempname} w={hw.w} h={hw.h}/> }
                         
-                    </div>
+                        
+                        
+
                 </div>
+                </div>
+                
+
 
                 <div className='col-sm'>
-                    {/* <div style={{ width: '500px', height: '500px',backgroundImage: `url(${imgData})`, backgroundPosition: 'center',
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
-                    width: '500px',
-                    height: '500px' }}>
-                    <DynamicCreateElement
-                        style={{ height: "100%" }}
-                        target={<div style={{ border: '2px solid black' }}></div>}
-                    >
-                        <div className="elementContainer"></div>
-                    </DynamicCreateElement>
-                </div> */}
-                    <Annotation Image={imgData} Name={state.tempname}/>
-                    {/* <input type="text" onChange={TakeInput}  value={Input}/>
-                    <button type="submit" onClick={AddKeys}>submit</button>
-                    <ol>
-                        {console.log("render")}
-                        {keys.map((key) => <h1><li>{key}</li></h1>)}
-                    </ol> */}
+                   
+                    
                 </div>
             </div>
         </div>

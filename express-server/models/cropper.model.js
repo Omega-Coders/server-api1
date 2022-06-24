@@ -10,7 +10,10 @@ const cropperSchema = mongoose.Schema({
         required: true
     },
     coordinates:{
-        type: String
+            x: {type: Number},
+            y: {type: Number},
+            w: {type: Number},
+            h: {type: Number},
     },
     regex: {type: String,
         required: true

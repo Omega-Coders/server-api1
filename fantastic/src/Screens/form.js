@@ -15,16 +15,20 @@ function Form() {
   const navigate = useNavigate();
   const [TemplateName, setTemplateName] = useState('');
 
+
   const passName = () => {
-        navigate('/cropper',
+
+    if(TemplateName==="" || TemplateName===null){
+          alert("please give template name");
+    }else {
+              navigate('/cropper',
             {
                 state: {
                     tempname: TemplateName
                 }
             });
     }
-
-  
+  }
 
   return (
 <div>
@@ -125,7 +129,7 @@ function Form() {
                 id="firstName"
                 label="Enter Name of the Template"
                 autoFocus
-                onChange={(e)=> {setTemplateName(e.target.value); console.log(typeof(TemplateName))}}
+                onChange={(e)=> {setTemplateName(e.target.value)}}
               />
         </div>
         <br></br>

@@ -7,18 +7,23 @@ import '@recogito/annotorious/dist/annotorious.min.css';
 const axios = require('axios');
 
 
-async function postData(tempname, key, coord) {
-  await axios.post('http://localhost:8000/cropper/add-details', {
-            templateName: tempname,
-            key: key,
-            coordinates: coord,
-            regex: "string"
-        }).then(function (response){console.log(response)}).catch(function (response){console.log(response)})
-}
+  async function postData(tempname, key, coord, totalH, totalW) {
+    await axios.post('http://localhost:8000/cropper/add-details', {
+              templateName: tempname,
+              key: key,
+              x: Number(coord[0])/Number(totalW),
+              y: Number(coord[1])/Number(totalH),
+              w: Number(coord[2])/Number(totalW),
+              h: Number(coord[3])/Number(totalH),
+              regex: "string"
+          }).then(function (response){console.log(response)}).catch(function (response){console.log(response)})
+  }
 
 
 
 function Annotation(props) {
+
+
 
   // Ref to the image DOM element
   const imgEl = useRef();
@@ -47,18 +52,17 @@ function Annotation(props) {
       // Init
       annotorious = new Annotorious({
         image: imgEl.current,
-            widgets: [
-        'TAG',
-      ]
+            widgets: ['TAG']
       });
 
 
       // Attach event handlers here
       annotorious.on('createAnnotation', annotation => {
         console.log('created', annotation);
-        console.log(keys)
-        postData(props.Name, annotation.body[0].value, annotation.target.selector.value);
-        setKeys([...keys, {Key: annotation.body[0].value, Coordinates: "Coordiantes : "+annotation.target.selector.value}])
+        console.log(keys);
+        console.log(props.h, props.w, props.Name);
+        setKeys([...keys, {Key: annotation.body[0].value, Coordinates: "Coordiantes : "+annotation.target.selector.value}]);
+        postData(props.Name, annotation.body[0].value, annotation.target.selector.value.slice(11).split(","), props.h, props.w);
       });
 
 
@@ -104,7 +108,8 @@ function Annotation(props) {
       <img
         ref={imgEl} 
         src={props.Image} 
-        alt="" />
+        alt="" 
+        width="500px"/>
         
         <ol>
             {keys.map((key)=> <h3>{key.Key}<h5>{key.Coordinates}</h5></h3>)}
