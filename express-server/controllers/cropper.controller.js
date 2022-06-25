@@ -32,6 +32,10 @@ async function getCropperDetails(req, res) {
 }
 
 
+
+
+
+
 async function postTemplateImage(req, res) {
     try{
         const TemplateImageModelBody = new TemplateImageModel({

@@ -4,10 +4,13 @@ import { Annotorious } from '@recogito/annotorious';
 import '@recogito/annotorious/dist/annotorious.min.css';
 
 
+
 const axios = require('axios');
 
-
+  const l = [];
+  var ad = 0;
   async function postData(tempname, key, coord, totalH, totalW) {
+
     await axios.post('http://localhost:8000/cropper/add-details', {
               templateName: tempname,
               key: key,
@@ -16,8 +19,15 @@ const axios = require('axios');
               w: Number(coord[2])/Number(totalW),
               h: Number(coord[3])/Number(totalH),
               regex: "string"
-          }).then(function (response){console.log(response)}).catch(function (response){console.log(response)})
-  }
+          }).then(function (response){console.log(response); ad++;}).catch(function (response){console.log(response)});
+    if(ad===l.length){
+      alert("Successfully Submitted !!!!!!!!");
+    }
+}
+
+
+
+
 
 
 
@@ -34,7 +44,7 @@ function Annotation(props) {
   // Current drawing tool name
   const [ tool, setTool ] = useState('rect');
 
-  const [keys, setKeys] = useState([{}]);
+  const [keys, setKeys] = useState([]);
 
   // Init Annotorious when the component
   // mounts, and keep the current 'anno'
@@ -43,11 +53,8 @@ function Annotation(props) {
 
 
 
-
   useEffect(() => {
-      
     let annotorious = null;
-
     if (imgEl.current) {
       // Init
       annotorious = new Annotorious({
@@ -61,8 +68,12 @@ function Annotation(props) {
         console.log('created', annotation);
         console.log(keys);
         console.log(props.h, props.w, props.Name);
-        setKeys([...keys, {Key: annotation.body[0].value, Coordinates: "Coordiantes : "+annotation.target.selector.value}]);
-        postData(props.Name, annotation.body[0].value, annotation.target.selector.value.slice(11).split(","), props.h, props.w);
+        // setKeys([...keys, {Key: annotation.body[0].value, Coordinates: "Coordiantes : "+annotation.target.selector.value}]);
+        //setKeys([...keys, annotation.body[0].value]);
+        var obj= {Key: annotation.body[0].value, Coordinates: annotation.target.selector.value.slice(11).split(",")}
+        l.push(obj);
+
+        // postData(props.Name, annotation.body[0].value, annotation.target.selector.value.slice(11).split(","), props.h, props.w);
       });
 
 
@@ -71,8 +82,12 @@ function Annotation(props) {
       });
 
       annotorious.on('deleteAnnotation', annotation => {
+        var f = l.find(ele => ele.Key===annotation.body[0].value);
+        var index = l.indexOf(f);
+        console.log(index);
+        l.splice(index, 1);
+        console.log(l);
         console.log('deleted', annotation);
-        keys.pop();
       });
     }
 
@@ -83,7 +98,7 @@ function Annotation(props) {
 
     // Cleanup: destroy current instance
     return () => annotorious.destroy();
-  },[keys]);
+  },[props.h, props.w, props.Name]);
 
   // Toggles current tool + button label
   const toggleTool = () => {
@@ -99,21 +114,20 @@ function Annotation(props) {
   return (
     <div>
       <div>
-        {/* <button
-          onClick={toggleTool}>
-            { tool === 'rect' ? 'RECTANGLE' : 'POLYGON' }
-        </button> */}
-      </div>
-
-      <img
+        <img
         ref={imgEl} 
         src={props.Image} 
         alt="" 
         width="500px"/>
         
         <ol>
-            {keys.map((key)=> <h3>{key.Key}<h5>{key.Coordinates}</h5></h3>)}
+            {l.map((key)=> <h3>{key.Key}</h3>)}
         </ol>
+      </div>
+      <div>
+        <button onClick={()=>l.map((e)=>postData(props.Name, e.Key, e.Coordinates, props.h, props.w))}>Submit</button>
+      </div>
+      
     </div>
   );
 }
