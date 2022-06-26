@@ -12,7 +12,13 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
+import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { FaUser } from 'react-icons/fa'
+import { register, reset } from '../redux/auth-redux';
+//import Spinner from '../components/Spinner'
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -25,7 +31,6 @@ function Copyright() {
     </Typography>
   );
 }
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -45,11 +50,74 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
+function SignUp() {
+  const [formData, setFormData] = useState({
+    firstname: '',
+    lastname:' ',
+    email: '',
+    password: '',
+    password2: '',
+  })
 
-export default function SignUp() {
+  const { firstname,lastname, email, password, password2 } = formData
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  )
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message)
+    }
+
+    if (isSuccess || user) {
+      navigate('/form')
+    }
+
+    dispatch(reset())
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.id]: e.target.value,
+    }))
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+
+    if (password !== password2) {
+      toast.error('Passwords do not match')
+    } else {
+      const userData = {
+        firstname,
+        lastname,
+        email,
+        password,
+      }
+
+      dispatch(register(userData))
+    }
+  };
+
+  // if (isLoading) {
+  //   return <Spinner />
+  // }
+
+
+
+
+
+
+
   const classes = useStyles();
 
   return (
+
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -68,9 +136,10 @@ export default function SignUp() {
                 // variant="outlined"
                 required
                 fullWidth
-                id="firstName"
+                id="firstname"
                 label="First Name"
                 autoFocus
+                onChange={onChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -78,10 +147,11 @@ export default function SignUp() {
                 //variant="outlined"
                 required
                 fullWidth
-                id="lastName"
+                id="lastname"
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
+                onChange={onChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -92,6 +162,7 @@ export default function SignUp() {
                 id="email"
                 label="Email Address"
                 name="email"
+                onChange={onChange}
                 // autoComplete="email"
               />
             </Grid>
@@ -105,6 +176,20 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                //variant="outlined"
+                required
+                fullWidth
+                name="password"
+                label="confirm Password"
+                type="password"
+                id="password2"
+                onChange={onChange}
+                //autoComplete="confirm-password"
               />
             </Grid>
             <Grid item xs={12}>
@@ -120,6 +205,7 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={ onSubmit}
           >
             Sign Up
           </Button>
@@ -138,3 +224,4 @@ export default function SignUp() {
     </Container>
   );
 }
+export default SignUp;

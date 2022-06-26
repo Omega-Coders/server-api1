@@ -14,9 +14,13 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import axios from 'axios';
+import Login from './login';
 //sending data to the api;
 const url="http://localhost:8000/api/v1/forms"
+
 function Form() {
+
+
   const[publisher,setPublisher]=useState('');
   const[email,setEmail]=useState('');
   const[template,setTemplate]=useState('');
@@ -96,7 +100,7 @@ console.log(email,type);
             <img width="40px"  src={heading} style={{ marginRight: "8px" }} ></img></p>   */}
            <Container>
                <p style={{ fontWeight:"bold", fontSize:"50px" }}>
-               Let The Process Start By Creating..
+               Let The Process Start By Creating Template..
             <img width="40px"  src={heading} style={{ marginRight: "8px" }} ></img></p>   
           
            
