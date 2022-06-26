@@ -14,15 +14,15 @@ import { useLocation } from 'react-router-dom';
 
 
     async function postTemplateImage(tempName, img){
-        await axios.post('http://localhost:8000/cropper/add-template-image', {
-            templateName: tempName,
-            templateImage: img,
-        }).then(response => { 
-	    console.log(response)
-        })
-        .catch(error => {
-            console.log(error.response)
-        });
+        // await axios.post('http://textextraction-api.herokuapp.com/cropper/add-template-image', {
+        //     templateName: tempName,
+        //     templateImage: img,
+        // }).then(response => { 
+	    // console.log(response)
+        // })
+        // .catch(error => {
+        //     console.log(error.response)
+        // });
             }
 
 

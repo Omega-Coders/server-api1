@@ -11,7 +11,7 @@ const axios = require('axios');
   var ad = 0;
   async function postData(tempname, key, coord, totalH, totalW) {
 
-    await axios.post('http://localhost:8000/cropper/add-details', {
+    await axios.post('http://textextraction-api.herokuapp.com/cropper/add-details', {
               templateName: tempname,
               key: key,
               x: Number(coord[0])/Number(totalW),
@@ -52,16 +52,16 @@ function Annotation(props) {
 
 
 
-
   useEffect(() => {
     let annotorious = null;
     if (imgEl.current) {
       // Init
       annotorious = new Annotorious({
         image: imgEl.current,
-            widgets: ['TAG']
+            widgets: [ 
+            'TAG'
+          ]
       });
-
 
       // Attach event handlers here
       annotorious.on('createAnnotation', annotation => {
@@ -70,6 +70,7 @@ function Annotation(props) {
         console.log(props.h, props.w, props.Name);
         // setKeys([...keys, {Key: annotation.body[0].value, Coordinates: "Coordiantes : "+annotation.target.selector.value}]);
         //setKeys([...keys, annotation.body[0].value]);
+        
         var obj= {Key: annotation.body[0].value, Coordinates: annotation.target.selector.value.slice(11).split(",")}
         l.push(obj);
 

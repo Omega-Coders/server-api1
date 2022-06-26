@@ -10,8 +10,6 @@ cropperRouter.get('/cropper/get-details', getCropperDetails);
 
 cropperRouter.get('/cropper/get-template-image', getTemplateImage);
 
-
-
 cropperRouter.post('/cropper/add-template-image', postTemplateImage);
 
 module.exports = cropperRouter;

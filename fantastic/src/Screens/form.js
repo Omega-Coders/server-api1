@@ -18,7 +18,7 @@ import { useLocation } from 'react-router-dom';
 
 
 //sending data to the api;
-const url="http://localhost:8000/api/v1/forms"
+const url="http://textextraction-api.herokuapp.com/api/v1/forms"
 function Form() {
 
   const {state} = useLocation();
