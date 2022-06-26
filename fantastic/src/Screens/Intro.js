@@ -59,11 +59,12 @@ return (
           
           </Nav.Link>
         <Nav.Link href="#">
+        <Link to ="/signup">
           <Button variant="light" style={{ backgroundColor:"#ccccff",  borderRadius:"15px"}}><img width="24"
             className="align-top d-inline-block nav-comp"
             height="24" src={sign_in}  alt="logo"></img>
           Sign Up</Button>
-          
+          </Link>
           </Nav.Link>
         <Nav.Link href="#" className='butt'>
           <Button variant="light" className="contact-but" style={{ color:"white", backgroundColor:"#5d3fd3", borderRadius:"15px", }}>

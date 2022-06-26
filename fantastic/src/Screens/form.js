@@ -18,7 +18,8 @@ import { useLocation } from 'react-router-dom';
 
 
 //sending data to the api;
-const url="http://textextraction-api.herokuapp.com/api/v1/forms"
+const url="http://textextraction-api.herokuapp.com/api/v1/forms";
+
 function Form() {
 
   const {state} = useLocation();
@@ -102,7 +103,7 @@ navigate('/cropper',
             <img width="40px"  src={heading} style={{ marginRight: "8px" }} ></img></p>   */}
            <Container>
                <p style={{ fontWeight:"bold", fontSize:"50px" }}>
-               Let The Process Start By Creating..
+               Let The Process Start By Creating Template..
             <img width="40px"  src={heading} style={{ marginRight: "8px" }} ></img></p>   
           
           
